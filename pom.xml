@@ -38,6 +38,41 @@
             <version>5.1.38</version>
             <scope>runtime</scope>
         </dependency>        
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>phantomjsdriver</artifactId>
+            <version>1.4.4</version>
+        </dependency>        
     </dependencies>
-
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>pe.gob.reniec.pki.cancelacion.screen.capture.ScreenCapture</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <Codebase>${jars.codebase}</Codebase>
+                            <Permissions>all-permissions</Permissions>
+                            <Application-Name>${project.name}</Application-Name>
+                        </manifestEntries>                        
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>                
+            </plugin>        
+    </plugins>
+    </build>
 </project>

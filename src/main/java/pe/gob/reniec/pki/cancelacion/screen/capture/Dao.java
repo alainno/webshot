@@ -25,7 +25,15 @@ public class Dao {
     public static Connection con;
     //private static Query query;
     //private static final Logger LOG = Logger.getLogger(Dao.class);
-    private static boolean connect;
+    private final static String DB_HOST = "localhost:3306";
+    private final static String DB_NAME = "pkiep_sirs";
+    private final static String DB_USER = "pkiep_sirs";
+    private final static String DB_PASS = "pkiep_sirs";
+    
+//    private final static String DB_HOST = "172.24.10.70:1326";
+//    private final static String DB_NAME = "pkiep_sirs";
+//    private final static String DB_USER = "dev";
+//    private final static String DB_PASS = "Develop2016";
 
     static {
 //		String dbHost = CFG.prop("db.host");
@@ -35,25 +43,14 @@ public class Dao {
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
-
-//            if (cfg.COMPILE_MODE == "pre") {
-//                Dao.sql2o = new Sql2o("java:/sscpp");
-//            } else {
-            //Dao.sql2o = new Sql2o("jdbc:mysql://" + CFG.prop("db.host") + "/" + CFG.prop("db.name"), CFG.prop("db.user"), CFG.prop("db.pass"));
-            Dao.sql2o = new Sql2o("jdbc:mysql://172.24.4.227:3306/pkiep-sirs", "pkiep-sirs", "pkiep-sirs");
-//            }
-
-//                if(Dao.sql2o == null){
-//                    Dao.connect = false;
-//                    LOG.error("sql2o es nulo");
-//                }else{
-//                    Dao.connect = true;
-//                    LOG.info("Conexión con la DB satisfactoria");
-//                }
+            //Dao.sql2o = new Sql2o("jdbc:mysql://172.24.4.227:3306/pkiep-sirs", "pkiep-sirs", "pkiep-sirs");
+            Dao.sql2o = new Sql2o("jdbc:mysql://"+DB_HOST+"/"+DB_NAME, DB_USER, DB_PASS);
+            System.out.println("Instancia de base de datos creada");
         } catch (Exception /*| NamingException*/ e) {
             //LOG.info("Error al instanciar DB: " + e.getLocalizedMessage());
 //			Dao.connect = false;
             //e.printStackTrace();
+            System.out.println("Excepción al instanciar base de datos: " + e.getLocalizedMessage());
         }
     }
 
