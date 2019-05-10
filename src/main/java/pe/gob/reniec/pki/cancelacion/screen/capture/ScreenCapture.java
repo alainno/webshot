@@ -89,12 +89,12 @@ public class ScreenCapture {
             System.exit(0);
         }
         System.out.println("MAIL PARAMS = " + mailParams);
-        
-        if(!sc.enviarReporte(imagePath, mailParams)){
+        if(!sc.enviarReporte(imagePath, mailParams, url)){
             System.out.println("Error al enviar reporte");
             System.exit(0);
         }
         System.out.println("Reporte enviado con éxito!");
+        System.exit(0);
     }
 
     private String capturar(String url) {
@@ -110,10 +110,13 @@ public class ScreenCapture {
             //String imagePath = "D:\\screenshot.png";
 //            String imagePath = "/home/serviciospki/screenshot.png";
             File tempFile = File.createTempFile("screenshot", ".png");
+            tempFile.deleteOnExit();
             //String imagePath = "/home/serviciospki/screenshot.png";
             //FileUtils.copyFile(scrFile, new File(imagePath));
             FileUtils.copyFile(scrFile, tempFile);
-            driver.close();
+            //driver.close();
+            driver.quit();
+            
             System.out.println("screenshot done");
 //            return imagePath;
             return tempFile.getAbsolutePath();
@@ -123,7 +126,7 @@ public class ScreenCapture {
         }
     }
     
-    public boolean enviarReporte(String imagePath, Map<String,String> params){                
+    public boolean enviarReporte(String imagePath, Map<String,String> params, String url){                
         JMailer mailer = new JMailer();
         mailer.charSet = "UTF-8";
         mailer.host = params.get("MAIL_SERVIDOR");
@@ -138,7 +141,7 @@ public class ScreenCapture {
        
         String cid = "123456789";
         mailer.AddAttachment(imagePath, cid);
-        mailer.body = "<html><head></head><body><img src=\"cid:"+cid+"\" alt=\"\"/></body></html>";
+        mailer.body = "<html><head></head><body><a href=\""+url+"\"><img src=\"cid:"+cid+"\" alt=\""+url+"\"/></a></body></html>";
        
         String destinatarios = params.get("MAIL_DESTINOSSERVICIOS");
         if(destinatarios == null || destinatarios.isEmpty()){
@@ -146,9 +149,9 @@ public class ScreenCapture {
             return false;
         }
         
-        /*List<String> paras = new ArrayList();
-        paras.add("aalejo@pkiep.reniec.gob.pe");
-        paras.add("alaings@gmail.com");*/
+//        List<String> paras = new ArrayList();
+//        paras.add("aalejo@pkiep.reniec.gob.pe");
+//        paras.add("alaings@gmail.com");
         List<String> paras = Arrays.asList(destinatarios.split(";"));
         for(String para : paras){
             mailer.addAddress(para);
